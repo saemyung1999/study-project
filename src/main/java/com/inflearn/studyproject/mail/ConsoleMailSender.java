@@ -1,4 +1,4 @@
-package com.inflearn.studyproject;
+package com.inflearn.studyproject.mail;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;

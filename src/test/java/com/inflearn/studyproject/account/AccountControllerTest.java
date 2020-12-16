@@ -1,5 +1,6 @@
 package com.inflearn.studyproject.account;
 
+import com.inflearn.studyproject.domain.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ class AccountControllerTest {
                 .andExpect(model().attributeExists("signUpForm"));
     }
 
-    @DisplayName("회원가입 처리 - 입력값 오류")
+    @DisplayName("회원가입 처리 - 입력값 정상")
     @Test
     void signUpSubmit_with_wrong_input() throws Exception {
         mockMvc.perform(post("/sign-up")
@@ -50,9 +51,12 @@ class AccountControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
+        Account account = accountRepository.findByEmail("saemyung@naver.com");
+        assertNotNull(account);
+        assertNotEquals(account.getPassword(), "12345678");
+        assertNotNull(account.getEmailCheckToken());
+
         assertTrue(accountRepository.existsByEmail("saemyung@naver.com"));
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
     }
-
-
 }
