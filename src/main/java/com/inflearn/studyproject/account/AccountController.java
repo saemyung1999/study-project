@@ -3,6 +3,8 @@ package com.inflearn.studyproject.account;
 import com.inflearn.studyproject.domain.Account;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -20,6 +22,7 @@ import javax.validation.Valid;
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
+    private final AccountService accountService;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -37,6 +40,9 @@ public class AccountController {
         if (errors.hasErrors()) {
             return "account/sign-up";
         }
+
+        accountService.processNewAccount(signUpForm);
+
         return "redirect:/";
     }
 }
